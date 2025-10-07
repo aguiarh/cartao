@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.env
+.venv
+venv/
+
+# Streamlit / dados locais
+data/
+*.db
+app.db
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
