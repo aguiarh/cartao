@@ -80,8 +80,29 @@ def categorias_default():
 # ------------------------------
 # Banco (SQLite)
 # ------------------------------
+import tempfile
+
+def _pick_writable_dir():
+    candidates = [
+        "/mount/data",                      # Streamlit Cloud (persistente)
+        tempfile.gettempdir(),              # fallback
+        os.getcwd(),                        # local
+    ]
+    for p in candidates:
+        try:
+            os.makedirs(p, exist_ok=True)
+            test = os.path.join(p, ".write_test")
+            with open(test, "w", encoding="utf-8") as f:
+                f.write("ok")
+            os.remove(test)
+            return p
+        except Exception:
+            continue
+    return os.getcwd()
+
 APP_DIR = os.path.dirname(__file__) if "__file__" in globals() else os.getcwd()
-DATA_DIR = os.path.join(APP_DIR, "data")
+DATA_ROOT = _pick_writable_dir()
+DATA_DIR = os.path.join(DATA_ROOT, "cartao_data")
 os.makedirs(DATA_DIR, exist_ok=True)
 DB_PATH = os.path.join(DATA_DIR, "app.db")
 
